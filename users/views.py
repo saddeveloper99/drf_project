@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from users.serializers import UserSerializer
-
+from rest_framework import permissions
 
 # Create your views here.
 class UserView(APIView):
@@ -15,3 +15,11 @@ class UserView(APIView):
        else:
            return Response({"message":f"{serializer.errors}"}, status=status.HTTP_400_BAD_REQUEST)
        
+class mockView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        user.is_admin = True
+        return Response("get 요청")
+    
