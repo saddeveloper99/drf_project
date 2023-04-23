@@ -1,8 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,django,visualstudiocode,pycharm,windows,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,django,visualstudiocode,pycharm,windows,macos
 secrets.json
-**/migrations/**_initial.py
-**/migrations/**_alter**.py
+**/migrations/**.py
 !**/migrations/_init_.py
 drf_week2_front
 ### Django ###
