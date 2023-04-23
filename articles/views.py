@@ -9,18 +9,18 @@ from articles.serializers import (
     ArticleSerializer,
     ArticleListSerializer,
     ArticleCreateSerializer,
+    CommentSerializer,
+    CommentCreateSerializer,
 )
 
 
 class ArticleView(APIView):
     def get(self, request):
-        print(request.user)
         article_list = Article.objects.all()
         serializer = ArticleListSerializer(article_list, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        print(request.user)
         serializer = ArticleCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user)
@@ -58,14 +58,22 @@ class ArticleDetailView(APIView):
 
 class CommentView(APIView):
     def get(self, request, article_id):
-        pass
+        article = get_object_or_404(Article, id=article_id)
+        comments = article.comment_set.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request):
-        pass
+    def post(self, request, article_id):
+        serializer = CommentCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user, article_id=article_id)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CommentDetailView(APIView):
-    def put(self, request):
+    def put(self, request, article_id):
         pass
 
     def delete(self, request, article_id):
@@ -73,5 +81,5 @@ class CommentDetailView(APIView):
 
 
 class LikeView(APIView):
-    def post(self, request):
+    def post(self, request, article_id):
         pass
